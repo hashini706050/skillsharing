@@ -1,17 +1,20 @@
+package com.skillshare.controller;
+
+import com.skillshare.model.Post;
+import com.skillshare.repository.PostRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 import java.time.Instant;
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import com.skillshare.model.Post;
-
+@Slf4j
+@RestController
+@RequestMapping("/posts")
+@RequiredArgsConstructor
 public class PostController {
     private final PostRepository postRepository;
     
