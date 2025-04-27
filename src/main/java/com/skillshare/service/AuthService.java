@@ -53,4 +53,16 @@ public class AuthService {
         return new AuthResponse(token, mapToUserResponse(savedUser));
     }
 
+    private UserResponse mapToUserResponse(User user) {
+        return new UserResponse(
+            user.getId(),
+            user.getEmail(),
+            user.getFirstName(),
+            user.getLastName(),
+            user.getAddress(),
+            user.getBirthday(),
+            user.getAvatarUrl()
+        );
+    }
+
 }
