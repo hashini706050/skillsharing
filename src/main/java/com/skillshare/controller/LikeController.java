@@ -7,6 +7,7 @@ import javax.management.Notification;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -91,5 +92,29 @@ public ResponseEntity<Like> addLike(@PathVariable String postId) {
         throw new RuntimeException("Failed to add like", e);
     }
 }
+
+
+ @DeleteMapping
+    public ResponseEntity<Void> removeLike(@PathVariable String postId) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String userId = auth.getName();
+            
+            log.debug("Removing like for post: {} by user: {}", postId, userId);
+            
+            likeRepository.findByPostIdAndUserId(postId, userId)
+                .ifPresentOrElse(
+                    like -> likeRepository.deleteById(like.getId()),
+                    () -> {
+                        throw new RuntimeException("Like not found");
+                    }
+                );
+            
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Error removing like for post: {}", postId, e);
+            throw new RuntimeException("Failed to remove like", e);
+        }
+    }
 
 }
