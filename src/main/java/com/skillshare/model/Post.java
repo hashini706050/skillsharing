@@ -1,5 +1,6 @@
 package com.skillshare.model;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,19 @@ public class Post {
     private List<MediaItem> media = new ArrayList<>();
     
     private String type; 
+
+    @Field("progress_template")
+    private ProgressTemplate progressTemplate;
+    
+    @Builder.Default
+    private List<Achievement> achievements = new ArrayList<>();
+    
+    @Field("created_at")
+    private Instant createdAt;
+    
+    @Field("updated_at")
+    private Instant updatedAt;
+}
 
 
 
