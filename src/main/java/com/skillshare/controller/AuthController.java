@@ -16,4 +16,22 @@ public class AuthController {
         }
     }
     
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+        try {
+            log.debug("Registration attempt for email: {}", request.email());
+            AuthResponse response = authService.register(
+                request.email(),
+                request.password(),
+                request.firstName(),
+                request.lastName(),
+                request.address(),
+                request.birthday()
+            );
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Registration failed for email: {}", request.email(), e);
+            throw new RuntimeException("Registration failed: " + e.getMessage());
+        }
+    }
 }
