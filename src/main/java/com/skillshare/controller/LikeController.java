@@ -23,4 +23,8 @@ public class LikeController {
     private final PostRepository postRepository;
     private final NotificationRepository notificationRepository;
 
+    @GetMapping
+    public ResponseEntity<List<Like>> getLikes(@PathVariable String postId) {
+       
+    }
 }
