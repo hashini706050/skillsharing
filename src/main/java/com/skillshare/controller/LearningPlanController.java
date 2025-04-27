@@ -85,3 +85,14 @@ public class LearningPlanController {
             throw new RuntimeException("Failed to create learning plan", e);
         }
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<LearningPlan> getLearningPlan(@PathVariable String id) {
+        try {
+            return learningPlanRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            log.error("Error fetching learning plan with id: {}", id, e);
+            throw new RuntimeException("Failed to fetch learning plan", e);
+        }
+    }
