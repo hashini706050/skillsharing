@@ -20,4 +20,37 @@ public class AuthService {
         return new AuthResponse(token, mapToUserResponse(user));
     }
     
+    public AuthResponse register(
+        String email,
+        String password,
+        String firstName,
+        String lastName,
+        String address,
+        String birthday
+    ) {
+        log.debug("Attempting to register new user with email: {}", email);
+        
+        if (userRepository.existsByEmail(email)) {
+            log.debug("Email already registered: {}", email);
+            throw new RuntimeException("Email already registered");
+        }
+
+        User user = User.builder()
+            .email(email)
+            .password(passwordEncoder.encode(password))
+            .firstName(firstName)
+            .lastName(lastName)
+            .address(address)
+            .birthday(birthday)
+            .createdAt(Instant.now())
+            .updatedAt(Instant.now())
+            .build();
+
+        User savedUser = userRepository.save(user);
+        log.debug("Successfully registered user: {}", email);
+        
+        String token = jwtService.generateToken(savedUser);
+        return new AuthResponse(token, mapToUserResponse(savedUser));
+    }
+
 }
