@@ -1,6 +1,7 @@
 package com.skillshare.config;
 
 
-public class JwtAuthFilter {
+public class JwtAuthFilter extends OncePerRequestFilter {
+    private final JwtService jwtService;
     
 }
