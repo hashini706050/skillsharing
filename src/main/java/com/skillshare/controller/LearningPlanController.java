@@ -96,3 +96,40 @@ public class LearningPlanController {
             throw new RuntimeException("Failed to fetch learning plan", e);
         }
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<LearningPlan> updateLearningPlan(
+        @PathVariable String id,
+        @RequestBody LearningPlan plan
+    ) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String userId = auth.getName();
+            
+            return learningPlanRepository.findById(id)
+                .map(existingPlan -> {
+                    if (!existingPlan.getUserId().equals(userId)) {
+                        throw new RuntimeException("Not authorized to update this learning plan");
+                    }
+                    
+                    LearningPlan updatedPlan = LearningPlan.builder()
+                        .id(existingPlan.getId())
+                        .userId(existingPlan.getUserId())
+                        .title(plan.getTitle())
+                        .thumbnail(plan.getThumbnail())
+                        .skill(plan.getSkill())
+                        .skillLevel(plan.getSkillLevel())
+                        .description(plan.getDescription())
+                        .lessons(plan.getLessons())
+                        .duration(plan.getDuration())
+                        .createdAt(existingPlan.getCreatedAt())
+                        .updatedAt(Instant.now())
+                        .build();
+                        
+                    return ResponseEntity.ok(learningPlanRepository.save(updatedPlan));
+                })
+                .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            log.error("Error updating learning plan with id: {}", id, e);
+            throw new RuntimeException("Failed to update learning plan", e);
+        }
+    }
