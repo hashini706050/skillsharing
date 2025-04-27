@@ -34,4 +34,15 @@ public class AuthController {
             throw new RuntimeException("Registration failed: " + e.getMessage());
         }
     }
+
+    public record LoginRequest(String email, String password) {}
+    
+    public record RegisterRequest(
+        String email,
+        String password,
+        String firstName,
+        String lastName,
+        String address,
+        String birthday
+    ) {}
 }
