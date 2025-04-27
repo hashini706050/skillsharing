@@ -45,4 +45,16 @@ public class AuthController {
         String address,
         String birthday
     ) {}
+
+    public record AuthResponse(String token, UserResponse user) {}
+    
+    public record UserResponse(
+        String id,
+        String email,
+        String firstName,
+        String lastName,
+        String address,
+        String birthday,
+        String avatarUrl
+    ) {}
 }
