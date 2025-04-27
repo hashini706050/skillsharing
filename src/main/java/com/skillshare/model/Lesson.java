@@ -16,6 +16,7 @@ public class Lesson {
     private String title;
     private String description;
     
+    
     @Field("video_id")
     private String videoId;
     
