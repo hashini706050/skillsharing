@@ -45,4 +45,43 @@ public class LearningPlanController {
         }
     }
 
-    
+    @GetMapping("/my-plans")
+    public ResponseEntity<List<LearningPlan>> getMyLearningPlans() {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String userId = auth.getName();
+            
+            List<LearningPlan> plans = learningPlanRepository.findByUserId(userId);
+            return ResponseEntity.ok(plans);
+        } catch (Exception e) {
+            log.error("Error fetching user's learning plans", e);
+            throw new RuntimeException("Failed to fetch learning plans", e);
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<LearningPlan> createLearningPlan(@RequestBody LearningPlan plan) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String userId = auth.getName();
+            
+            LearningPlan newPlan = LearningPlan.builder()
+                .userId(userId)
+                .title(plan.getTitle())
+                .thumbnail(plan.getThumbnail())
+                .skill(plan.getSkill())
+                .skillLevel(plan.getSkillLevel())
+                .description(plan.getDescription())
+                .lessons(plan.getLessons())
+                .duration(plan.getDuration())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
+                
+            LearningPlan savedPlan = learningPlanRepository.save(newPlan);
+            return ResponseEntity.ok(savedPlan);
+        } catch (Exception e) {
+            log.error("Error creating learning plan", e);
+            throw new RuntimeException("Failed to create learning plan", e);
+        }
+    }
