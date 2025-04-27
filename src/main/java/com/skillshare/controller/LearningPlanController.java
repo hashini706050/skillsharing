@@ -133,3 +133,25 @@ public class LearningPlanController {
             throw new RuntimeException("Failed to update learning plan", e);
         }
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteLearningPlan(@PathVariable String id) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String userId = auth.getName();
+            
+            return learningPlanRepository.findById(id)
+                .map(plan -> {
+                    if (!plan.getUserId().equals(userId)) {
+                        throw new RuntimeException("Not authorized to delete this learning plan");
+                    }
+                    
+                    learningPlanRepository.deleteById(id);
+                    return ResponseEntity.ok().<Void>build();
+                })
+                .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            log.error("Error deleting learning plan with id: {}", id, e);
+            throw new RuntimeException("Failed to delete learning plan", e);
+        }
+    }
+}
