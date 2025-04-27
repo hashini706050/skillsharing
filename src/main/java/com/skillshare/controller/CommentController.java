@@ -137,24 +137,7 @@ public class CommentController {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String userId = auth.getName();
-
-            log.debug("Deleting comment: {} for post: {} by user: {}", commentId, postId, userId);
             
-            commentRepository.findById(commentId)
-                .ifPresentOrElse(
-                    comment -> {
-                        // Verify ownership
-                        if (!comment.getUserId().equals(userId)) {
-                            throw new RuntimeException("Not authorized to delete this comment");
-                        }
-                        commentRepository.deleteById(commentId);
-                    },
-                    () -> {
-                        throw new RuntimeException("Comment not found");
-                    }
-                );
-            
-            return ResponseEntity.ok().build();
             
         } catch (Exception e) {
             log.error("Error deleting comment: {} for post: {}", commentId, postId, e);
