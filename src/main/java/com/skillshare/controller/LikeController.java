@@ -25,6 +25,13 @@ public class LikeController {
 
     @GetMapping
     public ResponseEntity<List<Like>> getLikes(@PathVariable String postId) {
-       
+        try {
+            log.debug("Fetching likes for post: {}", postId);
+            List<Like> likes = likeRepository.findByPostId(postId);
+            return ResponseEntity.ok(likes);
+        } catch (Exception e) {
+            log.error("Error fetching likes for post: {}", postId, e);
+            throw new RuntimeException("Failed to fetch likes", e);
+        }
     }
 }
