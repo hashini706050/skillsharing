@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.skillshare.model.Post;
@@ -64,6 +65,33 @@ public class PostController {
         } catch (Exception e) {
             log.error("Error fetching post with id: {}", id, e);
             throw new RuntimeException("Failed to fetch post", e);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Post> updatePost(@PathVariable String id, @RequestBody Post post) {
+        try {
+            log.debug("Updating post with id: {}", id);
+            return postRepository.findById(id)
+                    .map(existingPost -> {
+                        Post updatedPost = Post.builder()
+                            .id(existingPost.getId())
+                            .userId(existingPost.getUserId())
+                            .title(post.getTitle())
+                            .content(post.getContent())
+                            .media(post.getMedia())
+                            .type(post.getType())
+                            .progressTemplate(post.getProgressTemplate())
+                            .createdAt(existingPost.getCreatedAt())
+                            .updatedAt(Instant.now())
+                            .build();
+                            
+                        return ResponseEntity.ok(postRepository.save(updatedPost));
+                    })
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            log.error("Error updating post with id: {}", id, e);
+            throw new RuntimeException("Failed to update post", e);
         }
     }
 
