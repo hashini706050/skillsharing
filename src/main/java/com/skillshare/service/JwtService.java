@@ -10,5 +10,24 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
+    public String generateToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", user.getId());
+        claims.put("email", user.getEmail());
+
+        long now = System.currentTimeMillis();
+        Date issuedAt = new Date(now);
+        Date expiration = new Date(now + jwtConfig.getExpiration()); // e.g., 86400000 for 1 day
+
+        return Jwts.builder()
+            .setClaims(claims)
+            .setSubject(user.getId())
+            .setIssuedAt(issuedAt)
+            .setExpiration(expiration)
+            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+            .compact();
+    }
+
+
     
 }
