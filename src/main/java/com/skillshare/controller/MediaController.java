@@ -1,5 +1,11 @@
 package com.skillshare.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 public class MediaController {
     private final MediaService mediaService;
@@ -18,4 +24,18 @@ public class MediaController {
                 throw new RuntimeException("Failed to upload media: " + e.getMessage());
             }
         }
+
+        @GetMapping("/{id}")
+    public ResponseEntity<byte[]> getMedia(@PathVariable String id) {
+        try {
+            MediaItem media = mediaService.getMedia(id);
+            return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(media.getContentType()))
+                .body(media.getData());
+        } catch (Exception e) {
+            log.error("Error retrieving media with id: {}", id, e);
+            throw new RuntimeException("Failed to retrieve media: " + e.getMessage());
+        }
+    }
+}
         
