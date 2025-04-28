@@ -11,3 +11,14 @@
 @NoArgsConstructor
 @AllArgsConstructor
 public class MediaItem {
+    private String id;
+    private String filename;
+    private String contentType;
+    private String description;
+    private String type;
+    private long size;
+    private String createdAt;
+    
+    @Transient
+    private byte[] data;
+}
