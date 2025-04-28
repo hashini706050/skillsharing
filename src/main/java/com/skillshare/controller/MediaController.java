@@ -8,3 +8,14 @@ public class MediaController {
     public ResponseEntity<MediaItem> uploadMedia(
         @RequestParam("file") MultipartFile file,
         @RequestParam(value = "description", required = false) String description
+        ) {
+            try {
+                log.info("Uploading media file: {}", file.getOriginalFilename());
+                MediaItem savedMedia = mediaService.saveMedia(file, description);
+                return ResponseEntity.ok(savedMedia);
+            } catch (Exception e) {
+                log.error("Error uploading media", e);
+                throw new RuntimeException("Failed to upload media: " + e.getMessage());
+            }
+        }
+        
