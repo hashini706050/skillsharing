@@ -1,5 +1,5 @@
-package com.skillshare.config;
 
+<<<<<<< HEAD
 import com.skillshare.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -54,3 +54,5 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
     
 }
+=======
+>>>>>>> 493c8c1269c8647924a0e5ff0c3323eeb7fc340f
