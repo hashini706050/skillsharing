@@ -27,7 +27,11 @@
 		<url/>
 	</scm>
 	<properties>
+<<<<<<< HEAD
+        <java.version>24</java.version>
+=======
         <java.version>17</java.version>
+>>>>>>> 03cc0e5acb0afcfa19a4aa0cedafbe9ef0bda664
         <jwt.version>0.11.5</jwt.version>
         <lombok.version>1.18.30</lombok.version>
     </properties>

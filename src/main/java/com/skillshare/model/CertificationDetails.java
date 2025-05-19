@@ -12,9 +12,11 @@ import lombok.NoArgsConstructor;
 
 
 
-public class Achievement {
-    private String type;
-    private String title;
-    private String description;
-    private String date;
+
+
+public class CertificationDetails {
+    private String name;
+    private String provider;
+    private String completionDate;
+    private String credentialUrl;
 }
